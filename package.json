@@ -1,0 +1,27 @@
+{
+  "name": "plandid-userdata-driver",
+  "version": "0.0.0",
+  "description": "The database driver API for the UserData database for Plandid.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "delete-database": "node scripts/deleteDatabase.js",
+    "create-database": "node scripts/createDatabase.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plandid/plandid-userdata-driver.git"
+  },
+  "author": "Carl Schader",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Plandid/plandid-userdata-driver/issues"
+  },
+  "homepage": "https://github.com/Plandid/plandid-userdata-driver#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.9"
+  }
+}
