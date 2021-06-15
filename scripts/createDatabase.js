@@ -28,6 +28,6 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
 
     await client.close();
 
-    console.log(`Database ${mongodbConfig.databaseName} has been created.`);
+    console.log(`Database ${databaseName} has been created.`);
     process.exit(0);
 })()

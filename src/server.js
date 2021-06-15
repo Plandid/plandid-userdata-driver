@@ -1,6 +1,6 @@
 const express = require("express");
-require("dotenv").config();
 const { connect } = require("./database");
+require("dotenv").config();
 
 (async function() {
     await connect();
