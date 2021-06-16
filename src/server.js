@@ -16,33 +16,34 @@ const { serviceName, httpPort, httpsPort } = require("./config");
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
 
-    app.use("*", require("./routes.js"));
+    app.use(require("./routes"));
 
-    if (process.env.SSL_KEY_PATH && process.env.SSL_CERTIFICATE_PATH) {
-        let sslKey = fs.readFileSync(process.env.SSL_KEY_PATH);
-        let sslCert = fs.readFileSync(process.env.SSL_CERTIFICATE_PATH);
+    app.use("*", function(req, res) {
+        res.status(404);
+        res.json({message: "no route found"});
+    });
 
+    if (process.env.SSL_KEY && process.env.SSL_CERTIFICATE) {
         try {
-            validateSSLCert(sslCert);
-            validateSSLKey(sslKey);
-            validateCertKeyPair(cert, key);
+            validateSSLCert(process.env.SSL_CERTIFICATE);
+            validateSSLKey(process.env.SSL_KEY);
+            validateCertKeyPair(process.env.SSL_CERTIFICATE, process.env.SSL_KEY);
         } catch (error) {
             console.error(error);
             process.exit(1);
         }
         
         const httpsOptions = {
-            key: sslKey,
-            cert: sslCert
+            key: process.env.SSL_KEY,
+            cert: process.env.SSL_CERTIFICATE
         };
         https.createServer(httpsOptions, app).listen(httpsPort);
         http.createServer(express().use(function(req, res) {
             res.redirect(`https://${req.headers.host}${req.url}`);
         })).listen(httpPort);
+        console.log(`${serviceName} running https on port: ${httpsPort}, and redirecting http on port: ${httpPort}...`);
     } else {
-        console.error("no SSL_KEY_PATH or no SSL_CERTIFICATION_PATH supplied");
-        process.exit(1);
+        http.createServer(app).listen(httpPort);
+        console.log(`${serviceName} running http on port: ${httpPort}...`);
     }
-
-    console.log(`${serviceName} running https on port: ${httpsPort}, and redirecting http on port: ${httpPort}`);
 })();

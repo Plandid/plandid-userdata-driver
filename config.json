@@ -1,3 +1,6 @@
 {
-    "databaseName": "UserData"
+    "serviceName": "Plandid UserData Driver",
+    "databaseName": "UserData",
+    "httpPort": 6080,
+    "httpsPort": 6443 
 }
