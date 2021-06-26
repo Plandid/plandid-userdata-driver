@@ -41,7 +41,7 @@ const { getServiceIdMap } = require("./utils");
         }
     });
 
-    // app.use(require("./routes"));
+    app.use(require("./routes"));
 
     app.use("*", function(req, res) {
         res.status(404).json({error: "no route found"});
