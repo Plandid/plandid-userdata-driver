@@ -4,11 +4,20 @@
   "description": "The database driver API for the UserData database for Plandid.",
   "main": "server.js",
   "scripts": {
-    "preinstall": "git config core.hooksPath gitHooks",
+    "prepare": "bash scripts/preinstall.sh",
     "test": "jest",
     "start": "node src/server.js",
     "delete-database": "node scripts/deleteDatabase.js",
-    "create-database": "node scripts/createDatabase.js"
+    "create-database": "node scripts/createDatabase.js",
+    "increment-patch": "node scripts/incrementPatch.js",
+    "increment-minor": "node scripts/incrementMinor.js",
+    "increment-major": "node scripts/incrementMajor.js",
+    "commit-minor": "bash scripts/commit-minor.sh",
+    "commit-major": "bash scripts/commit-major.sh",
+    "tag-commit": "node scripts/tagCommit.js",
+    "build-image": "node scripts/buildImage.js",
+    "run-container": "node scripts/runContainer.js",
+    "gcp-copy-devimage-to-prod": "bash scripts/gcp-copy-devimage-to-prod.sh"
   },
   "repository": {
     "type": "git",
@@ -21,10 +30,10 @@
   },
   "homepage": "https://github.com/Plandid/plandid-userdata-driver#readme",
   "dependencies": {
+    "basic-auth": "^2.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongodb": "^3.6.9",
-    "ssl-validator": "^1.0.7"
+    "mongodb": "^3.6.9"
   },
   "devDependencies": {
     "jest": "^27.0.4"
