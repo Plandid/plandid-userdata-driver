@@ -8,9 +8,11 @@ then
     exit 1
 elif [ "$2" = "" ]
 then
-    echo "no dev directory path given"
+    echo "no prod directory path given"
     exit 1
 else
+    sudo usermod -a -G docker ${USER}
+    gcloud auth login
     gcloud auth configure-docker
 
     docker pull $1

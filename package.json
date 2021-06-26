@@ -1,6 +1,6 @@
 {
   "name": "plandid-userdata-driver",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "The database driver API for the UserData database for Plandid.",
   "main": "server.js",
   "scripts": {
@@ -17,7 +17,8 @@
     "tag-commit": "node scripts/tagCommit.js",
     "build-image": "node scripts/buildImage.js",
     "run-container": "node scripts/runContainer.js",
-    "gcp-copy-devimage-to-prod": "bash scripts/gcp-copy-devimage-to-prod.sh"
+    "gcp-copy-devimage-to-prod": "bash scripts/gcp-copy-devimage-to-prod.sh",
+    "upload-image": "bash scripts/upload-image.sh"
   },
   "repository": {
     "type": "git",
