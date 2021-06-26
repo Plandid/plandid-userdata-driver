@@ -1,3 +1,6 @@
+const axios = require("axios");
+const config = require("./config");
+
 function objectMatchesTemplate(obj, template) {
     for (let key in template) {
         if (!(key in obj) || !(typeof template[key] === typeof obj[key])) {
@@ -5,6 +8,10 @@ function objectMatchesTemplate(obj, template) {
         }
     }
     return true;
+}
+
+function getPlandidAuthToken() {
+    return Buffer.from(`${config.serviceName}:${process.env.SERVICE_ID}`, 'utf8').toString('base64');
 }
 
 module.exports = {
@@ -20,5 +27,22 @@ module.exports = {
             res.status(400);
             res.json({message: optionalBody ? message + `\nOptional JSON body paramters:\n${JSON.stringify(expectedBody)}\n` : message});
         }
+    },
+
+    objectMatchesTemplate: objectMatchesTemplate,
+
+    getPlandidAuthToken: getPlandidAuthToken,
+
+    getServiceIdMap: async function() {
+        let serviceIdMap = {};
+        const res = await axios.get(new URL("services", process.env.APPDATA_DRIVER_URL).href, {
+            headers: {Authorization: `Basic ${getPlandidAuthToken()}`}
+        });
+        
+        for (const service of res.data) {
+            serviceIdMap[service.name] = service._id;
+        }
+
+        return serviceIdMap;
     }
 }

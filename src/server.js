@@ -1,15 +1,19 @@
+require("dotenv").config();
+
 const express = require("express");
 const https = require("https");
 const http = require("http");
 const fs = require("fs");
 const auth = require("basic-auth");
-require("dotenv").config();
 
-const { connect, authorize, ObjectID } = require("./database");
+const { connect, ObjectID } = require("./database");
 const { serviceName, httpPort, httpsPort } = require("./config");
+const { getServiceIdMap } = require("./utils");
 
 (async function() {
     await connect();
+
+    let serviceIdMap = await getServiceIdMap();
 
     const app = express();
 
@@ -20,13 +24,20 @@ const { serviceName, httpPort, httpsPort } = require("./config");
         res.status(200).send();
     });
 
-    // Authorize each request against our services collection
+    // Authorize each request against our cached serviceIdMap
     app.use(async function(req, res, next) {
         const credentials = auth.parse(req.headers.authorization);
-        if (credentials && ObjectID.isValid(credentials.pass) && await authorize(credentials.name, new ObjectID(credentials.pass))) {
+    
+        if (credentials && serviceIdMap[credentials.name] === credentials.pass) {
             next();
         } else {
-            res.status(401).json({error: "not authorized"});
+            serviceIdMap = await getServiceIdMap();
+            
+            if (credentials && serviceIdMap[credentials.name] === credentials.pass) {
+                next();
+            } else {
+                res.status(401).json({error: "not authorized"});
+            }
         }
     });
 
