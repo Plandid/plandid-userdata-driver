@@ -8,7 +8,4 @@ COPY --chown=node:node ./ ./
 
 RUN npm install --only=prod
 
-EXPOSE 8080
-EXPOSE 8443
-
 CMD ["npm", "run", "start"]

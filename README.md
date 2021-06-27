@@ -9,7 +9,7 @@ $ npm run create-database
 # building/running
 
 Make sure you have defined environment variables or a .env file that conforms to the .env.sample file. 
-The SSL variables are optional. If you supply, them the server will serve over https.
+The HTTPS_PORT SSL variables are optional. If you supply, them the server will serve over https.
 
 $ npm start
 

@@ -7,7 +7,7 @@ const fs = require("fs");
 const auth = require("basic-auth");
 
 const { connect, ObjectID } = require("./database");
-const { serviceName, httpPort, httpsPort } = require("./config");
+const { serviceName } = require("./config");
 const { getServiceIdMap } = require("./utils");
 
 (async function() {
@@ -53,13 +53,13 @@ const { getServiceIdMap } = require("./utils");
             key: fs.readFileSync(process.env.SSL_KEY_PATH)
         };
 
-        https.createServer(httpsOptions, app).listen(httpsPort);
+        https.createServer(httpsOptions, app).listen(process.env.HTTPS_PORT);
         http.createServer(express().use(function(req, res) {
             res.redirect(`https://${req.headers.host}${req.url}`);
-        })).listen(httpPort);
-        console.log(`${serviceName} running https on port: ${httpsPort}, and redirecting http on port: ${httpPort}...`);
+        })).listen(process.env.PORT);
+        console.log(`${serviceName} running https on port: ${process.env.HTTPS_PORT}, and redirecting http on port: ${process.env.PORT}...`);
     } else {
-        http.createServer(app).listen(httpPort);
-        console.log(`${serviceName} running http on port: ${httpPort}...`);
+        http.createServer(app).listen(process.env.PORT);
+        console.log(`${serviceName} running http on port: ${process.env.PORT}...`);
     }
 })();
