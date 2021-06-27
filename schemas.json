@@ -23,7 +23,7 @@
                 "minLength": 1
             },
             "currentSchedule": {
-                "bsonType": ["objectId", "null"]
+                "bsonType": ["string", "null"]
             }
         }
     },

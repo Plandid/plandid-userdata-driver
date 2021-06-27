@@ -14,7 +14,8 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
     const db = client.db(databaseName);
 
     for (let schemaName in schemas) {
-        await db.createCollection(schemaName, {
+        await db.command({
+            collMod: schemaName,
             validator: {
                 $jsonSchema: schemas[schemaName]
             }
@@ -29,6 +30,6 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
 
     await client.close();
 
-    console.log(`Database ${databaseName} has been created.`);
+    console.log(`Database ${databaseName} has been updated.`);
     process.exit(0);
 })();

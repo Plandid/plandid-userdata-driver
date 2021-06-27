@@ -20,17 +20,16 @@ function getPlandidAuthToken() {
 }
 
 module.exports = {
-    checkForClientError: function(req, res, options) {
+    checkForClientError: function(req, options) {
         let message = "";
     
-        if ((pathParams in options) && !objectMatchesTemplate(req.params, options.pathParams, options.typeCheck)) message += `\nInvalid path parameters. Expected Format:\n${JSON.stringify(options.pathParams)}\n`;
-        if ((queryParams in options) && !objectMatchesTemplate(req.query, options.queryParams, options.typeCheck)) message += `\nInvalid query parameters. Expected Format:\n${JSON.stringify(options.queryParams)}\n`;
-        if ((headers in options) && !objectMatchesTemplate(req.headers, options.headers, options.typeCheck)) message += `\nInvalid header parameters. Expected Format:\n${JSON.stringify(options.headers)}\n`;
-        if ((body in options) && !objectMatchesTemplate(req.body, options.body, options.typeCheck)) message += `\nInvalid JSON body. Expected Format:\n${JSON.stringify(options.body)}\n`;
+        if ("pathParams" in options && !objectMatchesTemplate(req.params, options.pathParams, options.typeCheck)) message += `\nInvalid path parameters. Expected Format:\n${JSON.stringify(options.pathParams)}\n`;
+        if ("queryParams" in options && !objectMatchesTemplate(req.query, options.queryParams, options.typeCheck)) message += `\nInvalid query parameters. Expected Format:\n${JSON.stringify(options.queryParams)}\n`;
+        if ("headers" in options && !objectMatchesTemplate(req.headers, options.headers, options.typeCheck)) message += `\nInvalid header parameters. Expected Format:\n${JSON.stringify(options.headers)}\n`;
+        if ("body" in options && !objectMatchesTemplate(req.body, options.body, options.typeCheck)) message += `\nInvalid JSON body. Expected Format:\n${JSON.stringify(options.body)}\n`;
     
         if (message.length > 0) {
-            res.status(400);
-            res.json({message: options.optionalBody ? message + `\nOptional JSON body paramters:\n${JSON.stringify(options.optionalBody)}\n` : message});
+            throw message;
         }
     },
 
