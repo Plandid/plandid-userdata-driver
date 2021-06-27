@@ -48,7 +48,7 @@ router.post("/:id", async function(req, res, next) {
         });
 
         await collection.insertOne({
-            _id: ObjectID(req.params.id), 
+            _id: new ObjectID(req.params.id), 
             dateCreated: new Date(req.body.dateCreated), 
             email: req.body.email, 
             passwordHash: req.body.passwordHash
@@ -62,7 +62,7 @@ router.post("/:id", async function(req, res, next) {
 
 router.patch("/:id", async function(req, res, next) {
     try {
-        await collection.updateOne({ _id: ObjectID(req.params.id) }, {$set: req.query});
+        await collection.updateOne({ _id: new ObjectID(req.params.id) }, {$set: req.query});
     
         res.sendStatus(200);
     } catch (error) {
@@ -72,7 +72,7 @@ router.patch("/:id", async function(req, res, next) {
 
 router.delete("/:id", async function(req, res, next) {
     try {
-        await collection.deleteOne({ _id: ObjectID(req.params.id) });
+        await collection.deleteOne({ _id: new ObjectID(req.params.id) });
     
         res.sendStatus(200);
     } catch (error) {
