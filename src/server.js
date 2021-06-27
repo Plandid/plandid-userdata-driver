@@ -47,7 +47,7 @@ const { getServiceIdMap } = require("./utils");
         res.status(404).json({error: "no route found"});
     });
         
-    if (process.env.SSL_CERTIFICATE_PATH && process.env.SSL_KEY_PATH) {
+    if (process.env.HTTPS_PORT && process.env.SSL_CERTIFICATE_PATH && process.env.SSL_KEY_PATH) {
         const httpsOptions = {
             cert: fs.readFileSync(process.env.SSL_CERTIFICATE_PATH),
             key: fs.readFileSync(process.env.SSL_KEY_PATH)

@@ -18,8 +18,9 @@
                 "minLength": 32
             },
             "tier": {
-                "bsonType": "int",
-                "enum": [0, 1]
+                "bsonType": "string",
+                "maxLength": 32,
+                "minLength": 1
             },
             "currentSchedule": {
                 "bsonType": ["objectId", "null"]

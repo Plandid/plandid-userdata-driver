@@ -6,51 +6,64 @@ const collection = fetchdb().collection("accounts");
 
 const router = express.Router();
 
-router.get("/:id", async function() {
-    let data = await collection.find({_id: new ObjectID(req.params.id)}).next();
-
-    res.json(data ? data : {error: "no records found"});
+router.get("/:id", async function(req, res, next) {
+    try {
+        let data = await collection.find({_id: new ObjectID(req.params.id)}).next();
+        res.json(data);
+    } catch (error) {
+        next(error);
+    }
 });
 
-// router.post("/", async function(req, res) {
-//     checkForClientError(req, res, expectedQueryParams={key: "random string"});
+router.post("/", async function(req, res, next) {
+    checkForClientError(req, res, expectedBody={
+        email: "email string",
+        passwordHash: "some hash",
+        tier: "tier name",
+        currentSchedule: "some schedule name or null"
+    }, typecheck=false);
 
-//     let jsonBody = {message: ""};
-
-//     let validationData = await db.readEmailValidationRecord(req.query.key);
-//     if (validationData !== null) {
-//         if (await db.accountExists(validationData.email)) {
-//             res.status(statusCodes.clientError);
-//             jsonBody.message = "Account already exists.";
-//         }
-//         else {
-//             await db.removeEmailValidationRecord(req.query.key);
-//             const userId = await db.createAccount(validationData.email, validationData.password, freeTierName);
-//             req.session.sessionID = await db.createOnlineRecord(userId);
-//             req.session.save();
-//             res.redirect(url);
-//         }
-//     }
-//     else {
-//         res.status(statusCodes.clientError);
-//         jsonBody.message = "Email validation timed out.";
-//     }
+    try {
+        await collection.insertOne(req.body);
     
-//     res.json(jsonBody);
-// });
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
 
-// router.get("/email", async function(req, res) {
-//     const userId = authorize(req, res);
+router.put("/:id", async function(req, res, next) {
+    checkForClientError(req, res, expectedBody={
+        email: "email string",
+        passwordHash: "some hash",
+        tier: "tier name",
+        currentSchedule: "some schedule name or null"
+    }, typecheck=false);
+
+    try {
+        await collection.updateOne({_id: ObjectID(req.params.id)}, req.body);
     
-//     res.status(statusCodes.ok);
-//     res.json({message: "Here is your email.", email: (await db.readUserDataRecordFromID(userId)).email});
-// });
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
 
-// router.get("/tier", async function(req, res) {
-//     const userId = authorize(req, res);
+router.patch("/:id", async function(req, res, next) {
+    checkForClientError(req, res, optionalBody={
+        email: "email",
+        passwordHash: "hash",
+        tier: "tier name",
+        currentSchedule: "schedule name or null"
+    });
 
-//     res.status(statusCodes.ok);
-//     res.json({message: "Here is your tier.", tier: (await db.readUserDataRecordFromID(userId)).tier});
-// });
+    try {
+        await collection.updateOne({_id: ObjectID(req.params.id)}, req.body);
+    
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;
