@@ -52,13 +52,13 @@
     },
     "onlineAccounts": {
         "bsonType": "object",
-        "required": ["userId", "dateCreated"],
+        "required": ["accountId", "dateCreated"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "dateCreated": {
@@ -68,13 +68,13 @@
     },
     "schedules": {
         "bsonType": "object",
-        "required": ["userId", "name"],
+        "required": ["accountId", "name"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "name": {
@@ -86,13 +86,13 @@
     },
     "categories": {
         "bsonType": "object",
-        "required": ["userId", "scheduleId", "categories"],
+        "required": ["accountId", "scheduleId", "categories"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -106,13 +106,13 @@
     },
     "people": {
         "bsonType": "object",
-        "required": ["userId", "scheduleId", "name", "categories"],
+        "required": ["accountId", "scheduleId", "name", "categories"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -131,13 +131,13 @@
     },
     "avalabilities": {
         "bsonType": "object",
-        "required": ["userId", "scheduleId", "personId", "availabilities"],
+        "required": ["accountId", "scheduleId", "personId", "availabilities"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -172,13 +172,13 @@
     },
     "pendingEvents": {
         "bsonType": "object",
-        "required": ["userId", "scheduleId", "pendingEvents"],
+        "required": ["accountId", "scheduleId", "pendingEvents"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -219,13 +219,13 @@
     },
     "events": {
         "bsonType": "object",
-        "required": ["userId", "scheduleId", "events"],
+        "required": ["accountId", "scheduleId", "events"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -269,13 +269,13 @@
     },
     "stripeCustomers": {
         "bsonType": "object",
-        "required": ["userId", "customerId"],
+        "required": ["accountId", "customerId"],
         "additionalProperties": false,
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "accountId": {
                 "bsonType": "objectId"
             },
             "customerId": {

@@ -10,7 +10,7 @@
     ],
     "onlineAccounts": [
         {
-            "index": {"userId": 1},
+            "index": {"accountId": 1},
             "options": {"unique": true}
         },
         {
@@ -20,43 +20,43 @@
     ],
     "schedules": [
         {
-            "index": {"userId": 1, "name": 1},
+            "index": {"accountId": 1, "name": 1},
             "options": {"unique": true}
         }
     ],
     "categories": [
         {
-            "index": {"userId": 1, "scheduleId": 1},
+            "index": {"accountId": 1, "scheduleId": 1},
             "options": {"unique": true}
         }
     ],
     "people": [
         {
-            "index": {"userId": 1, "scheduleId": 1, "name": 1},
+            "index": {"accountId": 1, "scheduleId": 1, "name": 1},
             "options": {"unique": true}
         }
     ],
     "avalabilities": [
         {
-            "index": {"userId": 1, "scheduleId": 1, "personId": 1},
+            "index": {"accountId": 1, "scheduleId": 1, "personId": 1},
             "options": {"unique": true}
         }
     ],
     "pendingEvents": [
         {
-            "index": {"userId": 1, "scheduleId": 1},
+            "index": {"accountId": 1, "scheduleId": 1},
             "options": {"unique": true}
         }
     ],
     "events": [
         {
-            "index": {"userId": 1, "scheduleId": 1},
+            "index": {"accountId": 1, "scheduleId": 1},
             "options": {"unique": true}
         }
     ],
     "stripeCustomers": [
         {
-            "index": {"userId": 1, "customerId": 1},
+            "index": {"accountId": 1, "customerId": 1},
             "options": {"unique": true}
         }
     ]

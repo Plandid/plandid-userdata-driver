@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/:id", async function(req, res, next) {
     try {
-        let data = await collection.find({_id: new ObjectID(req.params.id)}).next();
+        let data = await collection.find({ _id: new ObjectID(req.params.id) }).next();
         res.json(data);
     } catch (error) {
         next(error);
