@@ -99,8 +99,14 @@
                 "bsonType": "objectId"
             },
             "categories": {
-                "bsonType": "object",
-                "maxProperties": 20
+                "bsonType": "array",
+                "maxItems": 100,
+                "uniqueItems": true,
+                "items": {
+                    "bsonType": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                }
             }
         }
     },
@@ -124,8 +130,14 @@
                 "minLength": 1
             },
             "categories": {
-                "bsonType": "object",
-                "maxProperties": 20
+                "bsonType": "array",
+                "maxItems": 100,
+                "uniqueItems": true,
+                "items": {
+                    "bsonType": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                }
             }
         }
     },

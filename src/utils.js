@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { ObjectID } = require("./database");
 const config = require("./config");
 
 function objectMatchesTemplate(obj, template, typeCheck=false) {
@@ -17,6 +18,74 @@ function objectMatchesTemplate(obj, template, typeCheck=false) {
 
 function getPlandidAuthToken() {
     return Buffer.from(`${config.serviceName}:${process.env.SERVICE_ID}`, 'utf8').toString('base64');
+}
+
+async function mongoRestRoutes(router, collection, recordInstantiationFunction, queryInstantiationFunction) {
+    router.get("/:id", async function(req, res, next) {
+        try {
+            let data = await collection.find({ _id: new ObjectID(req.params.id) }).next();
+            res.json(data);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    router.post("/", async function(req, res, next) {
+        console.log((req.body))
+        try {
+            await collection.insertOne(recordInstantiationFunction(req.body));
+        
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    router.post("/:id", async function(req, res, next) {
+        try {
+            await collection.insertOne({ 
+                _id: new ObjectID(req.params.id), 
+                ...recordInstantiationFunction(req.body) 
+            });
+        
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    router.put("/:id", async function(req, res, next) {
+        try {
+            await collection.replaceOne({ _id: new ObjectID(req.params.id) }, { 
+                _id: new ObjectID(req.params.id), 
+                ...recordInstantiationFunction(req.body) 
+            }, { upsert: true });
+        
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    router.patch("/:id", async function(req, res, next) {
+        try {
+            await collection.updateOne({ _id: new ObjectID(req.params.id) }, {$set: queryInstantiationFunction(req.query)});
+        
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    router.delete("/:id", async function(req, res, next) {
+        try {
+            await collection.deleteOne({ _id: new ObjectID(req.params.id) });
+        
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    });
 }
 
 module.exports = {
@@ -48,5 +117,7 @@ module.exports = {
         }
 
         return serviceIdMap;
-    }
+    },
+
+    mongoRestRoutes: mongoRestRoutes
 }
