@@ -1,5 +1,4 @@
 const express = require("express");
-const auth = require("basic-auth");
 const { fetchdb, ObjectID } = require("../database");
 const { checkForClientError } = require("../utils");
 
@@ -9,7 +8,7 @@ const router = express.Router();
 
 router.get("/:id", async function(req, res, next) {
     try {
-        let data = await collection.find({_id: new ObjectID(req.params.id)}).next();
+        let data = await collection.find({ _id: new ObjectID(req.params.id) }).next();
         res.json(data);
     } catch (error) {
         next(error);
@@ -65,9 +64,7 @@ router.put("/:id", async function(req, res, next) {
             }
         });
 
-        const { pass } = auth.parse(req.headers.authorization);
-
-        await collection.replaceOne({_id: ObjectID(req.params.id)}, { _id: ObjectID(req.params.id), ...req.body }, { upsert: true });
+        await collection.replaceOne({ _id: ObjectID(req.params.id)}, { _id: ObjectID(req.params.id), ...req.body }, { upsert: true });
     
         res.sendStatus(200);
     } catch (error) {
@@ -77,7 +74,7 @@ router.put("/:id", async function(req, res, next) {
 
 router.patch("/:id", async function(req, res, next) {
     try {
-        await collection.updateOne({_id: ObjectID(req.params.id)}, {$set: req.query});
+        await collection.updateOne({ _id: ObjectID(req.params.id) }, {$set: req.query});
     
         res.sendStatus(200);
     } catch (error) {
@@ -87,7 +84,7 @@ router.patch("/:id", async function(req, res, next) {
 
 router.delete("/:id", async function(req, res, next) {
     try {
-        await collection.deleteOne({_id: ObjectID(req.params.id)});
+        await collection.deleteOne({ _id: ObjectID(req.params.id) });
     
         res.sendStatus(200);
     } catch (error) {
