@@ -8,9 +8,9 @@ router.use("/onlineAccounts", require("./routes/onlineAccounts"));
 router.use('/schedules', require('./routes/schedules'));
 router.use("/stripeCustomers", require("./routes/stripeCustomers"));
 
-router.use("/:schedule/people", require("./routes/people"));
-router.use("/:schedule/events", require("./routes/events"));
-router.use("/:schedule/categories", require("./routes/categories"));
-router.use('/:schedule/plans', require('./routes/plans'));
+router.use("/:scheduleId/categories", require("./routes/categories"));
+router.use("/:scheduleId/people", require("./routes/people"));
+router.use("/:scheduleId/events", require("./routes/events"));
+router.use('/:scheduleId/plans', require('./routes/plans'));
 
 module.exports = router;

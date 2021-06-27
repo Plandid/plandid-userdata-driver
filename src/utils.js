@@ -20,10 +20,11 @@ function getPlandidAuthToken() {
     return Buffer.from(`${config.serviceName}:${process.env.SERVICE_ID}`, 'utf8').toString('base64');
 }
 
-async function mongoRestRoutes(router, collection, recordInstantiationFunction, queryInstantiationFunction) {
+async function mongoRestRoutes(router, collection, generateFilter, generateRecord, generateUpdate) {
     router.get("/:id", async function(req, res, next) {
         try {
-            let data = await collection.find({ _id: new ObjectID(req.params.id) }).next();
+            let data = await collection.find({ _id: new ObjectID(req.params.id), ...generateFilter(req) });
+            data = await data.count() > 1 ? await data.toArray() : await data.next();
             res.json(data);
         } catch (error) {
             next(error);
@@ -31,9 +32,8 @@ async function mongoRestRoutes(router, collection, recordInstantiationFunction, 
     });
 
     router.post("/", async function(req, res, next) {
-        console.log((req.body))
         try {
-            await collection.insertOne(recordInstantiationFunction(req.body));
+            await collection.insertOne(generateRecord(req));
         
             res.sendStatus(200);
         } catch (error) {
@@ -43,10 +43,7 @@ async function mongoRestRoutes(router, collection, recordInstantiationFunction, 
 
     router.post("/:id", async function(req, res, next) {
         try {
-            await collection.insertOne({ 
-                _id: new ObjectID(req.params.id), 
-                ...recordInstantiationFunction(req.body) 
-            });
+            await collection.insertOne({ _id: new ObjectID(req.params.id), ...generateRecord(req) });
         
             res.sendStatus(200);
         } catch (error) {
@@ -56,10 +53,7 @@ async function mongoRestRoutes(router, collection, recordInstantiationFunction, 
 
     router.put("/:id", async function(req, res, next) {
         try {
-            await collection.replaceOne({ _id: new ObjectID(req.params.id) }, { 
-                _id: new ObjectID(req.params.id), 
-                ...recordInstantiationFunction(req.body) 
-            }, { upsert: true });
+            await collection.replaceOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) }, generateRecord(req), { upsert: true });
         
             res.sendStatus(200);
         } catch (error) {
@@ -69,7 +63,7 @@ async function mongoRestRoutes(router, collection, recordInstantiationFunction, 
 
     router.patch("/:id", async function(req, res, next) {
         try {
-            await collection.updateOne({ _id: new ObjectID(req.params.id) }, {$set: queryInstantiationFunction(req.query)});
+            await collection.updateOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) }, {$set: generateUpdate(req)});
         
             res.sendStatus(200);
         } catch (error) {
@@ -79,7 +73,7 @@ async function mongoRestRoutes(router, collection, recordInstantiationFunction, 
 
     router.delete("/:id", async function(req, res, next) {
         try {
-            await collection.deleteOne({ _id: new ObjectID(req.params.id) });
+            await collection.deleteOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) });
         
             res.sendStatus(200);
         } catch (error) {

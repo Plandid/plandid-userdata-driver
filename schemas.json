@@ -1,7 +1,7 @@
 {
     "accounts": {
         "bsonType": "object",
-        "required": ["email", "passwordHash", "tier", "currentSchedule"],
+        "required": ["email", "passwordHash", "tier", "currentScheduleId"],
         "additionalProperties": false,
         "properties": {
             "_id": {
@@ -22,8 +22,8 @@
                 "maxLength": 32,
                 "minLength": 1
             },
-            "currentSchedule": {
-                "bsonType": ["string", "null"]
+            "currentScheduleId": {
+                "bsonType": ["objectId", "null"]
             }
         }
     },

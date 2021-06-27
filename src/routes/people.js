@@ -4,20 +4,38 @@ const { mongoRestRoutes } = require("../utils");
 
 const collection = fetchdb().collection("people");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-mongoRestRoutes(router, collection, function(body) {
-    return {
-        accountId: new ObjectID(body.accountId),
-        scheduleId: new ObjectID(body.scheduleId),
-        name: body.name,
-        categories: Array.isArray(body.categories) ? body.categories : []
-    };
-}, function(query) {
-    if (query.hasOwnProperty("accountId")) query.accountId = new ObjectID(query.accountId);
-    if (query.hasOwnProperty("scheduleId")) query.scheduleId = new ObjectID(query.scheduleId);
-    if (query.hasOwnProperty("categories") && !Array.isArray(query.categories)) throw "categories query string must be a valid array";
-    return query;
-});
+mongoRestRoutes(router, collection, 
+    function(req) {
+        let filter = {
+            scheduleId: new ObjectID(req.params.scheduleId)
+        };
+
+        return filter;
+    }, 
+    function(req) {
+        let record = {
+            scheduleId: new ObjectID(req.params.scheduleId),
+            accountId: new ObjectID(req.body.accountId),
+            name: req.body.name,
+            categories: Array.isArray(req.body.categories) ? req.body.categories : []
+        };
+        
+        return record;
+    }, 
+    function(req) {
+        let update = {};
+
+        for (const key in req.query) {
+            if (key === "scheduleId") update.scheduleId = new ObjectID(req.query.scheduleId);
+            else if (key === "accountId") update.accountId = new ObjectID(req.query.accountId);
+            else if (key === "categories" && !Array.isArray(req.query.categories)) throw "categories query string must be a valid array";
+            else update[key] = req.query[key];
+        }
+        
+        return update;
+    }
+);
 
 module.exports = router;
