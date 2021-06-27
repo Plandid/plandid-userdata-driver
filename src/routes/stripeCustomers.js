@@ -2,7 +2,7 @@ const express = require("express");
 const { fetchdb, ObjectID } = require("../database");
 const { checkForClientError } = require("../utils");
 
-const collection = fetchdb().collection("schedules");
+const collection = fetchdb().collection("stripeCustomers");
 
 const router = express.Router();
 
@@ -20,13 +20,13 @@ router.post("/", async function(req, res, next) {
         checkForClientError(req, {
             body: {
                 accountId: "accountId string",
-                name: "schedule name"
+                customerId: "schedule name"
             }
         });
 
         await collection.insertOne({
             accountId: new ObjectID(req.body.accountId),
-            name: req.body.name
+            customerId: req.body.customerId
         });
     
         res.sendStatus(200);
@@ -40,15 +40,36 @@ router.post("/:id", async function(req, res, next) {
         checkForClientError(req, {
             body: {
                 accountId: "accountId string",
-                name: "schedule name"
+                customerId: "schedule name"
             }
         });
 
         await collection.insertOne({
             _id: new ObjectID(req.params.id),
             accountId: new ObjectID(req.body.accountId),
-            name: req.body.name
+            customerId: req.body.customerId
         });
+    
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put("/:id", async function(req, res, next) {
+    try {
+        checkForClientError(req, {
+            body: {
+                accountId: "accountId string",
+                customerId: "schedule name"
+            }
+        });
+
+        await collection.replaceOne({ _id: new ObjectID(req.params.id) }, {
+            _id: new ObjectID(req.params.id),
+            accountId: new ObjectID(req.body.accountId),
+            customerId: req.body.customerId
+        }, { upsert: true });
     
         res.sendStatus(200);
     } catch (error) {
