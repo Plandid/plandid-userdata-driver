@@ -2,7 +2,7 @@ const express = require("express");
 const { fetchdb, ObjectID } = require("../database");
 const { mongoRestRoutes } = require("../utils");
 
-const collection = fetchdb().collection("events");
+const collection = fetchdb().collection("categories");
 
 const router = express.Router({ mergeParams: true });
 
