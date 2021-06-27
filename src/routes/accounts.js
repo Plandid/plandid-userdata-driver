@@ -16,12 +16,14 @@ router.get("/:id", async function(req, res, next) {
 });
 
 router.post("/", async function(req, res, next) {
-    checkForClientError(req, res, expectedBody={
-        email: "email string",
-        passwordHash: "some hash",
-        tier: "tier name",
-        currentSchedule: "some schedule name or null"
-    }, typecheck=false);
+    checkForClientError(req, res, {
+        body: {
+            email: "email string",
+            passwordHash: "32 char hash",
+            tier: "tier name",
+            currentSchedule: "schedule name or null"
+        }
+    });
 
     try {
         await collection.insertOne(req.body);
@@ -33,12 +35,14 @@ router.post("/", async function(req, res, next) {
 });
 
 router.put("/:id", async function(req, res, next) {
-    checkForClientError(req, res, expectedBody={
-        email: "email string",
-        passwordHash: "some hash",
-        tier: "tier name",
-        currentSchedule: "some schedule name or null"
-    }, typecheck=false);
+    checkForClientError(req, res, {
+        body: {
+            email: "email string",
+            passwordHash: "32 char hash",
+            tier: "tier name",
+            currentSchedule: "schedule name or null"
+        }
+    });
 
     try {
         await collection.updateOne({_id: ObjectID(req.params.id)}, req.body);
@@ -50,11 +54,13 @@ router.put("/:id", async function(req, res, next) {
 });
 
 router.patch("/:id", async function(req, res, next) {
-    checkForClientError(req, res, optionalBody={
-        email: "email",
-        passwordHash: "hash",
-        tier: "tier name",
-        currentSchedule: "schedule name or null"
+    checkForClientError(req, res, {
+        optionalBody: {
+            email: "email string",
+            passwordHash: "32 char hash",
+            tier: "tier name",
+            currentSchedule: "schedule name or null"
+        }
     });
 
     try {
