@@ -56,6 +56,27 @@ router.post("/:id", async function(req, res, next) {
     }
 });
 
+router.put("/:id", async function(req, res, next) {
+    try {
+        checkForClientError(req, {
+            body: {
+                accountId: "accountId string",
+                name: "schedule name"
+            }
+        });
+
+        await collection.replaceOne({ _id: new ObjectID(req.params.id) }, {
+            _id: new ObjectID(req.params.id),
+            accountId: new ObjectID(req.body.accountId),
+            name: req.body.name
+        }, { upsert: true });
+    
+        res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+});
+
 router.patch("/:id", async function(req, res, next) {
     try {
         await collection.updateOne({ _id: new ObjectID(req.params.id) }, {$set: req.query});
