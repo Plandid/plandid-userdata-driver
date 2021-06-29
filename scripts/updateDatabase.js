@@ -22,7 +22,7 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
         });
     }
 
-    for  (const collection in indexes) {
+    for (const collection in indexes) {
         for (const kvp of indexes[collection]) {
             await db.collection(collection).createIndex(kvp.index, kvp.options);
         }
@@ -30,6 +30,6 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
 
     await client.close();
 
-    console.log(`Database ${databaseName} has been updated.`);
+    console.log(`database ${databaseName} has been updated`);
     process.exit(0);
 })();

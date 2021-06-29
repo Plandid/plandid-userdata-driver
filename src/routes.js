@@ -12,6 +12,7 @@ router.use("/:scheduleId/categories", require("./routes/categories"));
 router.use("/:scheduleId/people", require("./routes/people"));
 router.use("/:scheduleId/availabilities", require("./routes/availabilities"));
 router.use("/:scheduleId/events", require("./routes/events"));
+router.use();
 router.use('/:scheduleId/plans', require('./routes/plans'));
 
 module.exports = router;

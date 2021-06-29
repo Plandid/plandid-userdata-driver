@@ -1,6 +1,6 @@
 {
   "name": "plandid-userdata-driver",
-  "version": "0.9.1",
+  "version": "0.11.0",
   "description": "The database driver API for the UserData database for Plandid.",
   "main": "server.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "start": "node src/server.js",
     "delete-database": "node scripts/deleteDatabase.js",
     "create-database": "node scripts/createDatabase.js",
+    "clear-database": "node scripts/clearDatabase.js",
     "update-database": "node scripts/updateDatabase.js",
     "increment-patch": "node scripts/incrementPatch.js",
     "increment-minor": "node scripts/incrementMinor.js",

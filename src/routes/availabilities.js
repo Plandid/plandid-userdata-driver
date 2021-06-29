@@ -58,12 +58,4 @@ mongoRestRoutes(router, collection,
     }
 );
 
-router.put("/:availabilityIndex", async function(req, res, next) {
-    try {
-        // await collection.replaceOne()
-    } catch (error) {
-        next(error);
-    }
-});
-
 module.exports = router;

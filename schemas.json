@@ -1,7 +1,7 @@
 {
     "accounts": {
         "bsonType": "object",
-        "required": ["email", "passwordHash", "tier", "currentScheduleId"],
+        "required": ["email", "passwordHash", "userTier"],
         "additionalProperties": false,
         "properties": {
             "_id": {
@@ -10,23 +10,28 @@
             "email": {
                 "bsonType": "string",
                 "maxLength": 320,
-                "minLength": 1
+                "minLength": 3
             },
             "passwordHash": {
                 "bsonType": "string",
                 "maxLength": 32,
                 "minLength": 32
             },
-            "tier": {
+            "userTier": {
                 "bsonType": "string",
-                "maxLength": 32,
-                "minLength": 1
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
             },
             "currentScheduleId": {
-                "bsonType": ["objectId", "null"]
+                "bsonType": "objectId"
+            },
+            "stripeCustomerId": {
+                "bsonType": "string",
+                "maxLength": 18,
+                "minLength": 18
             }
         }
     },
+
     "pendingAccounts": {
         "bsonType": "object",
         "required": ["dateCreated", "email", "passwordHash"],
@@ -41,7 +46,7 @@
             "email": {
                 "bsonType": "string",
                 "maxLength": 320,
-                "minLength": 1
+                "minLength": 3
             },
             "passwordHash": {
                 "bsonType": "string",
@@ -50,6 +55,7 @@
             }
         }
     },
+
     "onlineAccounts": {
         "bsonType": "object",
         "required": ["accountId", "dateCreated"],
@@ -66,9 +72,10 @@
             }
         }
     },
+
     "schedules": {
         "bsonType": "object",
-        "required": ["accountId", "name"],
+        "required": ["accountId", "scheduleName"],
         "additionalProperties": false,
         "properties": {
             "_id": {
@@ -77,114 +84,68 @@
             "accountId": {
                 "bsonType": "objectId"
             },
-            "name": {
+            "scheduleName": {
                 "bsonType": "string",
-                "maxLength": 32,
-                "minLength": 1
-            }
-        }
-    },
-    "categories": {
-        "bsonType": "object",
-        "required": ["accountId", "scheduleId", "categories"],
-        "additionalProperties": false,
-        "properties": {
-            "_id": {
-                "bsonType": "objectId"
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
             },
-            "accountId": {
-                "bsonType": "objectId"
-            },
-            "scheduleId": {
-                "bsonType": "objectId"
-            },
-            "categories": {
-                "bsonType": "array",
-                "maxItems": 100,
-                "uniqueItems": true,
-                "items": {
-                    "bsonType": "string",
-                    "maxLength": 32,
-                    "minLength": 1
-                }
-            }
-        }
-    },
-    "people": {
-        "bsonType": "object",
-        "required": ["accountId", "scheduleId", "name", "categories"],
-        "additionalProperties": false,
-        "properties": {
-            "_id": {
-                "bsonType": "objectId"
-            },
-            "accountId": {
-                "bsonType": "objectId"
-            },
-            "scheduleId": {
-                "bsonType": "objectId"
-            },
-            "name": {
-                "bsonType": "string",
-                "maxLength": 32,
-                "minLength": 1
-            },
-            "categories": {
-                "bsonType": "array",
-                "maxItems": 100,
-                "uniqueItems": true,
-                "items": {
-                    "bsonType": "string",
-                    "maxLength": 32,
-                    "minLength": 1
-                }
-            }
-        }
-    },
-    "avalabilities": {
-        "bsonType": "object",
-        "required": ["accountId", "scheduleId", "personId", "availabilities"],
-        "additionalProperties": false,
-        "properties": {
-            "_id": {
-                "bsonType": "objectId"
-            },
-            "accountId": {
-                "bsonType": "objectId"
-            },
-            "scheduleId": {
-                "bsonType": "objectId"
-            },
-            "personId": {
-                "bsonType": "objectId"
-            },
-            "avalabilities": {
-                "bsonType": "array",
-                "maxItems": 100,
-                "uniqueItems": true,
-                "items": {
-                    "bsonType": "object",
-                    "required": ["start", "end", "rrule"],
-                    "additionalProperties": false,
-                    "properties": {
-                        "start": {
-                            "bsonType": "date"
-                        },
-                        "end": {
-                            "bsonType": "date"
-                        },
-                        "rrule": {
-                            "bsonType": ["string", "null"],
-                            "maxLength": 256
+            "people": {
+                "bsonType": "object",
+                "maxProperties": 256,
+                "patternProperties": {
+                    "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$": {
+                        "bsonType": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "categories": {
+                                "bsonType": "object",
+                                "maxProperties": 64,
+                                "patternProperties": {
+                                    "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$": {
+                                        "bsonType": "null"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     },
+    
+    "availabilities": {
+        "bsonType": "object",
+        "required": ["accountId", "scheduleId", "personName", "startDate", "milliseconds"],
+        "additionalProperties": false,
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "accountId": {
+                "bsonType": "objectId"
+            },
+            "scheduleId": {
+                "bsonType": "objectId"
+            },
+            "personName": {
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+            },
+            "startDate": {
+                "bsonType": "date"
+            },
+            "milliseconds": {
+                "bsonType": "int",
+                "minimum": 0
+            },
+            "rrule": {
+                "bsonType": "string",
+                "maxLength": 256
+            }
+        }
+    },
+
     "pendingEvents": {
         "bsonType": "object",
-        "required": ["accountId", "scheduleId", "pendingEvents"],
+        "required": ["accountId", "scheduleId", "startDate", "milliseconds"],
         "additionalProperties": false,
         "properties": {
             "_id": {
@@ -196,42 +157,36 @@
             "scheduleId": {
                 "bsonType": "objectId"
             },
-            "pendingEvents": {
-                "bsonType": "array",
-                "maxItems": 256,
-                "items": {
-                    "bsonType": "object",
-                    "required": ["start", "end", "name", "category", "rrule"],
-                    "additionalProperties": false,
-                    "properties": {
-                        "start": {
-                            "bsonType": "date"
-                        },
-                        "end": {
-                            "bsonType": "date"
-                        },
-                        "name": {
-                            "bsonType": "string",
-                            "maxLength": 32,
-                            "minLength": 1
-                        },
-                        "category": {
-                            "bsonType": "string",
-                            "maxLength": 32,
-                            "minLength": 1
-                        },
-                        "rrule": {
-                            "bsonType": ["string", "null"],
-                            "maxLength": 256
-                        }
+            "startDate": {
+                "bsonType": "date"
+            },
+            "milliseconds": {
+                "bsonType": "int",
+                "minimum": 0
+            },
+            "rrule": {
+                "bsonType": "string",
+                "maxLength": 256
+            },
+            "eventName": {
+                "bsonType": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+            },
+            "categories": {
+                "bsonType": "object",
+                "maxProperties": 64,
+                "patternProperties": {
+                    "^([a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9])$": {
+                        "bsonType": "null"
                     }
                 }
             }
-        }
+        }        
     },
+
     "events": {
         "bsonType": "object",
-        "required": ["accountId", "scheduleId", "events"],
+        "required": ["accountId", "scheduleId", "startDate", "milliseconds"],
         "additionalProperties": false,
         "properties": {
             "_id": {
@@ -243,58 +198,34 @@
             "scheduleId": {
                 "bsonType": "objectId"
             },
-            "events": {
-                "bsonType": "array",
-                "maxItems": 1073741824,
-                "items": {
-                    "bsonType": "object",
-                    "required": ["start", "end", "name", "personId", "category", "rrule"],
-                    "additionalProperties": false,
-                    "properties": {
-                        "start": {
-                            "bsonType": "date"
-                        },
-                        "end": {
-                            "bsonType": "date"
-                        },
-                        "name": {
-                            "bsonType": "string",
-                            "maxLength": 32,
-                            "minLength": 1
-                        },
-                        "personId": {
-                            "bsonType": "objectId"
-                        },
-                        "category": {
-                            "bsonType": "string",
-                            "maxLength": 32,
-                            "minLength": 1
-                        },
-                        "rrule": {
-                            "bsonType": ["string", "null"],
-                            "maxLength": 256
-                        }
+            "startDate": {
+                "bsonType": "date"
+            },
+            "milliseconds": {
+                "bsonType": "int",
+                "minimum": 0
+            },
+            "rrule": {
+                "bsonType": "string",
+                "maxLength": 256
+            },
+            "eventName": {
+                "bsonType": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+            },
+            "categories": {
+                "bsonType": "object",
+                "maxProperties": 64,
+                "patternProperties": {
+                    "^([a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9])$": {
+                        "bsonType": "null"
                     }
                 }
-            }
-        }
-    },
-    "stripeCustomers": {
-        "bsonType": "object",
-        "required": ["accountId", "customerId"],
-        "additionalProperties": false,
-        "properties": {
-            "_id": {
-                "bsonType": "objectId"
             },
-            "accountId": {
-                "bsonType": "objectId"
-            },
-            "customerId": {
+            "appointee": {
                 "bsonType": "string",
-                "maxLength": 18,
-                "minLength": 18
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
             }
-        }
+        }        
     }
 }
