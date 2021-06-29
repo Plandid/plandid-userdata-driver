@@ -20,10 +20,30 @@ function getPlandidAuthToken() {
     return Buffer.from(`${config.serviceName}:${process.env.SERVICE_ID}`, 'utf8').toString('base64');
 }
 
-async function mongoRestRoutes(router, collection, generateFilter, generateRecord, generateUpdate) {
-    router.get("/:id", async function(req, res, next) {
+function useFilter(req, pathFilter, recordFilter) {
+    let filter = {};
+    let record = {};
+
+    for (const key in req.params) {
+        filter[key] = pathFilter.hasOwnProperty(key) ? pathFilter[key](req.params[key]) : req.params[key];
+    }
+
+    for (const key in req.query) {
+        record[key] = recordFilter.hasOwnProperty(key) ? recordFilter[key](req.query[key]) : req.query[key];
+    }
+
+    for (const key in req.body) {
+        record[key] = recordFilter.hasOwnProperty(key) ? recordFilter[key](req.body[key]) : req.body[key];
+    }
+
+    return {filter: filter, record: record};
+}
+
+async function simpleDatabaseMethods(router, collection, pathFilter, recordFilter) {
+    router.get("/:_id", async function(req, res, next) {
         try {
-            let data = await collection.find({ _id: new ObjectID(req.params.id), ...generateFilter(req) });
+            const { filter } = useFilter(req, pathFilter, {});
+            let data = await collection.find(filter);
             data = await data.count() > 1 ? await data.toArray() : await data.next();
             res.json(data);
         } catch (error) {
@@ -33,7 +53,8 @@ async function mongoRestRoutes(router, collection, generateFilter, generateRecor
 
     router.post("/", async function(req, res, next) {
         try {
-            await collection.insertOne(generateRecord(req));
+            const { record } = useFilter(req, {}, recordFilter);
+            await collection.insertOne(record);
         
             res.sendStatus(200);
         } catch (error) {
@@ -41,9 +62,10 @@ async function mongoRestRoutes(router, collection, generateFilter, generateRecor
         }
     });
 
-    router.post("/:id", async function(req, res, next) {
+    router.post("/:_id", async function(req, res, next) {
         try {
-            await collection.insertOne({ _id: new ObjectID(req.params.id), ...generateRecord(req) });
+            const { filter, record } = useFilter(req, pathFilter, recordFilter);
+            await collection.insertOne({ ...filter, ...record });
         
             res.sendStatus(200);
         } catch (error) {
@@ -51,9 +73,10 @@ async function mongoRestRoutes(router, collection, generateFilter, generateRecor
         }
     });
 
-    router.put("/:id", async function(req, res, next) {
+    router.put("/:_id", async function(req, res, next) {
         try {
-            await collection.replaceOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) }, generateRecord(req), { upsert: true });
+            const { filter, record } = useFilter(req, pathFilter, recordFilter);
+            await collection.replaceOne(filter, record, { upsert: true });
         
             res.sendStatus(200);
         } catch (error) {
@@ -61,9 +84,10 @@ async function mongoRestRoutes(router, collection, generateFilter, generateRecor
         }
     });
 
-    router.patch("/:id", async function(req, res, next) {
+    router.patch("/:_id", async function(req, res, next) {
         try {
-            await collection.updateOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) }, {$set: generateUpdate(req)});
+            const { filter, record } = useFilter(req, pathFilter, recordFilter);
+            await collection.updateOne(filter, {$set: record});
         
             res.sendStatus(200);
         } catch (error) {
@@ -71,9 +95,10 @@ async function mongoRestRoutes(router, collection, generateFilter, generateRecor
         }
     });
 
-    router.delete("/:id", async function(req, res, next) {
+    router.delete("/:_id", async function(req, res, next) {
         try {
-            await collection.deleteOne({ _id: new ObjectID(req.params.id), ...generateFilter(req) });
+            const { filter } = useFilter(req, pathFilter, {});
+            await collection.deleteOne(filter);
         
             res.sendStatus(200);
         } catch (error) {
@@ -113,5 +138,5 @@ module.exports = {
         return serviceIdMap;
     },
 
-    mongoRestRoutes: mongoRestRoutes
+    simpleDatabaseMethods: simpleDatabaseMethods
 }
