@@ -114,13 +114,10 @@
     
     "availabilities": {
         "bsonType": "object",
-        "required": ["accountId", "scheduleId", "personName", "startDate", "milliseconds"],
+        "required": ["scheduleId", "personName", "startDate", "milliseconds"],
         "additionalProperties": false,
         "properties": {
             "_id": {
-                "bsonType": "objectId"
-            },
-            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -145,13 +142,10 @@
 
     "pendingEvents": {
         "bsonType": "object",
-        "required": ["accountId", "scheduleId", "startDate", "milliseconds"],
+        "required": ["scheduleId", "startDate", "milliseconds"],
         "additionalProperties": false,
         "properties": {
             "_id": {
-                "bsonType": "objectId"
-            },
-            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -174,6 +168,7 @@
             },
             "categories": {
                 "bsonType": "object",
+                "additionalProperties": false,
                 "maxProperties": 64,
                 "patternProperties": {
                     "^([a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9])$": {
@@ -186,13 +181,10 @@
 
     "events": {
         "bsonType": "object",
-        "required": ["accountId", "scheduleId", "startDate", "milliseconds"],
+        "required": ["scheduleId", "startDate", "milliseconds"],
         "additionalProperties": false,
         "properties": {
             "_id": {
-                "bsonType": "objectId"
-            },
-            "accountId": {
                 "bsonType": "objectId"
             },
             "scheduleId": {
@@ -215,6 +207,7 @@
             },
             "categories": {
                 "bsonType": "object",
+                "additionalProperties": false,
                 "maxProperties": 64,
                 "patternProperties": {
                     "^([a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9])$": {

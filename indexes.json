@@ -41,14 +41,14 @@
 
     "avalabilities": [
         {
-            "index": {"accountId": 1, "scheduleId": 1, "personName": 1, "startDate": 1},
+            "index": {"scheduleId": 1, "personName": 1, "startDate": 1},
             "options": {"unique": true}
         }
     ],
 
     "pendingEvents": [
         {
-            "index": {"accountId": 1, "scheduleId": 1},
+            "index": {"scheduleId": 1},
             "options": {"unique": true}
         },
         {
@@ -59,7 +59,7 @@
 
     "events": [
         {
-            "index": {"accountId": 1, "scheduleId": 1},
+            "index": {"scheduleId": 1},
             "options": {"unique": true}
         },
         {

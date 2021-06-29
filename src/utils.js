@@ -39,7 +39,7 @@ function useFilter(req, pathFilter, recordFilter) {
     return {filter: filter, record: record};
 }
 
-async function simpleDatabaseMethods(router, collection, pathFilter, recordFilter) {
+async function simpleDatabaseMethods(router, collection, pathFilter={}, recordFilter={}) {
     router.get("/:_id", async function(req, res, next) {
         try {
             const { filter } = useFilter(req, pathFilter, {});
@@ -76,7 +76,7 @@ async function simpleDatabaseMethods(router, collection, pathFilter, recordFilte
     router.put("/:_id", async function(req, res, next) {
         try {
             const { filter, record } = useFilter(req, pathFilter, recordFilter);
-            await collection.replaceOne(filter, record, { upsert: true });
+            await collection.replaceOne(filter, { ...filter, ...record }, { upsert: true });
         
             res.sendStatus(200);
         } catch (error) {

@@ -38,7 +38,6 @@ module.exports = {
 
     "availabilities": {
         "_id": ObjectID(0),
-        "accountId": ObjectID(0),
         "scheduleId": ObjectID(0),
         "personName": "example person name",
         "startDate": new Date(1624967198749),
@@ -48,7 +47,6 @@ module.exports = {
 
     "pendingEvents": {
         "_id": ObjectID(0),
-        "accountId": ObjectID(0),
         "scheduleId": ObjectID(0),
         "startDate": new Date(1624967198749),
         "milliseconds": 1000,
@@ -61,7 +59,6 @@ module.exports = {
 
     "events": {
         "_id": ObjectID(0),
-        "accountId": ObjectID(0),
         "scheduleId": ObjectID(0),
         "startDate": new Date(1624967198749),
         "milliseconds": 1000,
