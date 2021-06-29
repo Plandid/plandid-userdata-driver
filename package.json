@@ -1,6 +1,6 @@
 {
   "name": "plandid-userdata-driver",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "The database driver API for the UserData database for Plandid.",
   "main": "server.js",
   "scripts": {
