@@ -1,11 +1,12 @@
 const { MongoClient, ObjectID } = require("mongodb");
 const { databaseName } = require("./config");
     
-const client = new MongoClient(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+let client;
 
 module.exports = {
     connect: async function() {
         try {
+            client = new MongoClient(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
             await client.connect();
         } catch (error) {
             console.error(error);

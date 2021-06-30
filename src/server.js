@@ -6,11 +6,14 @@ const http = require("http");
 const fs = require("fs");
 const auth = require("basic-auth");
 
-const { connect, ObjectID } = require("./database");
+const { connect } = require("./database");
 const { serviceName } = require("./config");
-const { getServiceIdMap } = require("./utils");
+const { getEnvironment, getServiceIdMap } = require("./utils");
 
 (async function() {
+    Object.assign(process.env, await getEnvironment());
+    // console.log(process.env)
+
     await connect();
 
     let serviceIdMap = await getServiceIdMap();

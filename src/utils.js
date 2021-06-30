@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { ObjectID } = require("./database");
 const config = require("./config");
 
 function objectMatchesTemplate(obj, template, typeCheck=false) {
@@ -108,6 +107,10 @@ async function simpleDatabaseMethods(router, collection, pathFilter={}, recordFi
 }
 
 module.exports = {
+    objectMatchesTemplate: objectMatchesTemplate,
+    getPlandidAuthToken: getPlandidAuthToken,
+    simpleDatabaseMethods: simpleDatabaseMethods,
+
     checkForClientError: function(req, options) {
         let message = "";
     
@@ -120,10 +123,6 @@ module.exports = {
             throw message;
         }
     },
-
-    objectMatchesTemplate: objectMatchesTemplate,
-
-    getPlandidAuthToken: getPlandidAuthToken,
 
     getServiceIdMap: async function() {
         let serviceIdMap = {};
@@ -138,5 +137,30 @@ module.exports = {
         return serviceIdMap;
     },
 
-    simpleDatabaseMethods: simpleDatabaseMethods
+    getClientIdMap: async function() {
+        let clientIdMap = {};
+        const res = await axios.get(new URL("clients", process.env.APPDATA_DRIVER_URL).href, {
+            headers: {Authorization: `Basic ${getPlandidAuthToken()}`}
+        });
+        
+        for (const service of res.data) {
+            clientIdMap[service.name] = service._id;
+        }
+
+        return clientIdMap;
+    },
+
+    getEnvironment: async function() {
+        let variables = {};
+        try {
+            const res = await axios.get(new URL(`services/${process.env.SERVICE_ID}`, process.env.APPDATA_DRIVER_URL).href, {
+                headers: {Authorization: `Basic ${getPlandidAuthToken()}`}
+            });
+            variables = res.data.environmentVariables;
+        } catch (error) {
+            console.error("couldn't fetch environment");
+            console.error(error);
+        }
+        return variables ? variables : {};
+    }
 }

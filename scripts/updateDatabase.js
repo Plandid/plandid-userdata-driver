@@ -14,25 +14,17 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
     const db = client.db(databaseName);
 
     for (let schemaName in schemas) {
-        try {
-            await db.command({
-                collMod: schemaName,
-                validator: {
-                    $jsonSchema: schemas[schemaName]
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
+        await db.command({
+            collMod: schemaName,
+            validator: {
+                $jsonSchema: schemas[schemaName]
+            }
+        });
     }
 
     for (const collection in indexes) {
         for (const kvp of indexes[collection]) {
-            try {
-                await db.collection(collection).createIndex(kvp.index, kvp.options);
-            } catch (error) {
-                console.error(error);
-            }
+            await db.collection(collection).createIndex(kvp.index, kvp.options);
         }
     }
 

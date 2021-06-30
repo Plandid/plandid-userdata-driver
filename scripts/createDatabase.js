@@ -15,36 +15,24 @@ const { databaseName } = JSON.parse(fs.readFileSync("./config.json"));
     const db = client.db(databaseName);
 
     for (let schemaName in schemas) {
-        try {
-            await db.createCollection(schemaName, {
-                validator: {
-                    $jsonSchema: schemas[schemaName]
-                }
-            });
-            console.log(`created collection: ${schemaName}`);
-        } catch (error) {
-            console.error(error);
-        }
+        await db.createCollection(schemaName, {
+            validator: {
+                $jsonSchema: schemas[schemaName]
+            }
+        });
+        console.log(`created collection: ${schemaName}`);
     }
 
     for (const collection in indexes) {
         for (const kvp of indexes[collection]) {
-            try {
-                await db.collection(collection).createIndex(kvp.index, kvp.options);
-            } catch (error) {
-                console.error(error);
-            }
+            await db.collection(collection).createIndex(kvp.index, kvp.options);
         }
         console.log(`created indexes for collection: ${collection}`);
     }
 
     for (const collection in examples) {
-        try {
-            await db.collection(collection).insertOne(examples[collection]);
-            console.log(`inserted example for collection: ${collection}`);
-        } catch (error) {
-            console.error(error);
-        }
+        await db.collection(collection).insertOne(examples[collection]);
+        console.log(`inserted example for collection: ${collection}`);
     }
 
     await client.close();
