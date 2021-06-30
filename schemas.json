@@ -19,7 +19,7 @@
             },
             "userTier": {
                 "bsonType": "string",
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             },
             "currentScheduleId": {
                 "bsonType": "objectId"
@@ -86,13 +86,13 @@
             },
             "scheduleName": {
                 "bsonType": "string",
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             },
             "people": {
                 "bsonType": "object",
                 "maxProperties": 256,
                 "patternProperties": {
-                    "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$": {
+                    "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$": {
                         "bsonType": "object",
                         "additionalProperties": false,
                         "properties": {
@@ -100,7 +100,7 @@
                                 "bsonType": "object",
                                 "maxProperties": 64,
                                 "patternProperties": {
-                                    "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$": {
+                                    "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$": {
                                         "bsonType": "null"
                                     }
                                 }
@@ -124,7 +124,7 @@
                 "bsonType": "objectId"
             },
             "personName": {
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             },
             "startDate": {
                 "bsonType": "date"
@@ -164,7 +164,7 @@
             },
             "eventName": {
                 "bsonType": "string",
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             },
             "categories": {
                 "bsonType": "object",
@@ -203,7 +203,7 @@
             },
             "eventName": {
                 "bsonType": "string",
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             },
             "categories": {
                 "bsonType": "object",
@@ -217,7 +217,7 @@
             },
             "appointee": {
                 "bsonType": "string",
-                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ]{0,126}[a-zA-Z0-9]$"
+                "pattern": "^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]{0,126}[a-zA-Z0-9-_]$"
             }
         }        
     }
