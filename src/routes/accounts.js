@@ -1,12 +1,12 @@
 const express = require("express");
-const { fetchdb, ObjectID } = require("../database");
-const { simpleDatabaseMethods } = require("../utils");
+const { mongoCollectionApiMethods, getdb } = require('@plandid/mongo-utils');
+const { ObjectID } = require('mongodb');
 
-const collection = fetchdb().collection("accounts");
+const collection = getdb().collection("accounts");
 
 const router = express.Router();
 
-simpleDatabaseMethods(router, collection, 
+mongoCollectionApiMethods(router, collection, 
     { _id: x => ObjectID(x) },
     {
         _id: x => ObjectID(x),

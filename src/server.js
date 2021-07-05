@@ -5,18 +5,15 @@ const https = require("https");
 const http = require("http");
 const fs = require("fs");
 const auth = require("basic-auth");
+const { connect } = require('@plandid/mongo-utils');
+const { checkServiceCreds, updateEnvironment } = require("@plandid/server-utils");
 
-const { connect } = require("./database");
-const { serviceName } = require("./config");
-const { getEnvironment, getServiceIdMap } = require("./utils");
+const { serviceName } = JSON.parse(fs.readFileSync("./config.json"));
 
 (async function() {
-    Object.assign(process.env, await getEnvironment());
-    // console.log(process.env)
+    await updateEnvironment();
 
-    await connect();
-
-    let serviceIdMap = await getServiceIdMap();
+    await connect(process.env.DB_URL);
 
     const app = express();
 
@@ -31,16 +28,10 @@ const { getEnvironment, getServiceIdMap } = require("./utils");
     app.use(async function(req, res, next) {
         const credentials = auth.parse(req.headers.authorization);
     
-        if (credentials && serviceIdMap[credentials.name] === credentials.pass) {
+        if (credentials && checkServiceCreds(credentials.name, credentials.pass)) {
             next();
         } else {
-            serviceIdMap = await getServiceIdMap();
-            
-            if (credentials && serviceIdMap[credentials.name] === credentials.pass) {
-                next();
-            } else {
-                res.status(401).json({error: "not authorized"});
-            }
+            res.status(401).json({error: "not authorized"});
         }
     });
 
