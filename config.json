@@ -1,4 +1,3 @@
 {
-    "serviceName": "plandid-userdata-driver",
-    "databaseName": "userdata"
+    "serviceName": "plandid-userdata-driver"
 }

@@ -39,7 +39,7 @@
         }
     ],
 
-    "avalabilities": [
+    "availabilities": [
         {
             "index": {"scheduleId": 1, "personName": 1, "startDate": 1},
             "options": {"unique": true}
